@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Sith List</h1>
+  {% if sith_list %}
+  <ul>
+    {% for sith in sith_list %}
+      <li>
+        <a href="{{ sith.get_absolute_url }}">{{ sith.name }}</a> ({{ sith.planet }})
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no siths registered.</p>
+  {% endif %}
+{% endblock %}l>

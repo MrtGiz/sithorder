@@ -1,7 +1,9 @@
 from django.db import models
-from sithordersite.settings import charfield_length
+# from sithordersite.settings import charfield_length
+from django.urls import reverse
 
 # Create your models here.
+charfield_length = 50
 
 
 class Planet(models.Model):
@@ -18,7 +20,17 @@ class Sith(models.Model):
     def __str__(self):
         return self.name
 
-    # def shadow_hand_count(self):
+    # функция отображения количества рук тени у ситха
+    def shadow_hand_count(self):
+        count_sh = Recruit.objects.filter(master=self).count()
+        return count_sh
+    shadow_hand_count.short_description = 'Количество рук тени'
+
+    def get_absolute_url(self):
+        """
+        Returns the url to access a particular author instance.
+        """
+        return reverse('sith-detail', args=[str(self.id)])
 
 
 class Recruit(models.Model):
@@ -37,4 +49,7 @@ class Recruit(models.Model):
 
     def __str__(self):
         return self.name
+
+
+
 
