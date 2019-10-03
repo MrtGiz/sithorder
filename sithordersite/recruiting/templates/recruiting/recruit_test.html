@@ -1,0 +1,17 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+
+<form action="{% url 'recruit-testing' recruit.id %}" method="post">
+    {% csrf_token %}
+    <h1>Test</h1>
+    <p>Recruit name: {{ recruit.name }} </p>
+
+    <table>
+    {{ form.as_p}}
+    </table>
+    <input type="submit" value="Подтвердить" />
+
+
+</form>
+{% endblock %}

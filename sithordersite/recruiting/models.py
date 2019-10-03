@@ -2,6 +2,8 @@ from django.db import models
 # from sithordersite.settings import charfield_length
 from django.urls import reverse
 
+import uuid
+
 # Create your models here.
 charfield_length = 50
 
@@ -51,5 +53,32 @@ class Recruit(models.Model):
         return self.name
 
 
+class Test(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4,
+                          help_text="Уникальный код испытания")
+    questions = models.ManyToManyField('TestQuestions', help_text='вопросы в тесте')
+    recruit = models.ForeignKey('Recruit', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return 'Test CODE: {0}\nRecruit name: {1}'.format(self.id, self.recruit)
 
 
+class TestQuestions(models.Model):
+    question = models.TextField(max_length=300, help_text='Введите текст вопроса')
+    # test = models.ForeignKey('Test', on_delete=models.CASCADE)
+    is_used_in_test = models.BooleanField(blank=True, default=False,
+                                          help_text='Отметьте, чтобы использовать вопрос в тестах',
+                                          verbose_name='Использовать в тестах',
+                                          )
+
+    def __str__(self):
+        return '{0}'.format(self.question)
+
+
+class TestAnswers(models.Model):
+    answer = models.BooleanField()
+    test = models.ForeignKey('Test', on_delete=models.CASCADE)
+    to_question = models.ForeignKey('TestQuestions', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '{0}'.format(self.answer)
