@@ -23,10 +23,11 @@ class Sith(models.Model):
         return self.name
 
     # функция отображения количества рук тени у ситха
+    @property
     def shadow_hand_count(self):
         count_sh = Recruit.objects.filter(master=self).count()
         return count_sh
-    shadow_hand_count.short_description = 'Количество рук тени'
+    # shadow_hand_count.short_description = 'Количество рук тени'
 
     def get_absolute_url(self):
         """
@@ -47,16 +48,32 @@ class Recruit(models.Model):
             'unique': "Данный E-Mail уже зарегистрирован."
         })
     shadow_hand_rank = models.BooleanField(default=False, verbose_name="Наличие звания Руки Тени")
-    master = models.ForeignKey('Sith', on_delete=models.SET_NULL, null=True, blank=True)
+    master = models.ForeignKey('Sith', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name
+
+    @property
+    def get_questions_answers(self):
+        test = Test.objects.get(recruit=self)
+        print(test)
+        questions = TestQuestions.objects.filter(is_used_in_test=True)
+        print(questions)
+        qa = list()
+
+        for question in questions:
+            print('im here! - 1- ', question)
+            t_answer = TestAnswers.objects.get(test=test, to_question=question)
+            print('im here! - 2 - ', t_answer)
+            qa.append((question, t_answer))
+        print(qa)
+        return qa
 
 
 class Test(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                           help_text="Уникальный код испытания")
-    questions = models.ManyToManyField('TestQuestions', help_text='вопросы в тесте')
+    questions = models.ManyToManyField('TestQuestions', help_text='вопросы в тесте', blank=True)
     recruit = models.ForeignKey('Recruit', on_delete=models.CASCADE)
 
     def __str__(self):
