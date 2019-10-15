@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Sith Menu</h1>
+    <form action="{% url 'sith-list' %}" method="post">
+    {% csrf_token %}
+  {% if sith_list %}
+  <ul>
+    {% for sith in sith_list %}
+      <p><input type="radio" id="sith" name="sith_id" value="{{ sith.id }}">  {{ sith.name }} ({{ sith.planet }})</p>
+    {% endfor %}
+    <input type="submit" value="Выбрать">
+    <br>
+      <br>
+    <a href="{% url 'home' %}">Вернуться на главную</a>
+  </ul>
+    </form>
+  {% else %}
+    <p>There are no siths registered.</p>
+  {% endif %}
+{% endblock %}l>

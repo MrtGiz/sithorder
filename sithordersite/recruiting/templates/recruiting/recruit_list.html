@@ -8,8 +8,9 @@
     {% if recruits %}
         <ul>
         {% for recruit in recruits %}
+
         <li>
-          <input type="radio" id="recruit" name="recruit" value="{{ recruit }}">
+            <input type="radio" id="recruit" name="recruit" value="{{ recruit }}">
             <p>Name: {{ recruit.name }} (id: {{ recruit.id }})</p>
             <p>Age: {{ recruit.age }}</p>
             <p>E-mail: {{ recruit.email }}</p>
