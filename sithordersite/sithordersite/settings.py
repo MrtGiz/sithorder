@@ -131,4 +131,4 @@ EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_USE_SSL = True
 EMAIL_PORT = 465
 EMAIL_HOST_USER = "marathegiz@yandex.ru"
-EMAIL_HOST_PASSWORD = "EpgHr9REng8gGXa"
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'qwerty')
