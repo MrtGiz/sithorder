@@ -11,12 +11,19 @@ from . import forms
 
 
 def index(request):
-    """View function for home page of site."""
+    """
+    Отображение главной страницы сайта
+    """
+
     context = dict()
     return render(request, 'index.html', context)
 
 
 class RecruitCreate(CreateView):
+    """
+    Отображение формы регистрации рекрута
+    """
+
     model = Recruit
     fields = ['name', 'planet', 'age', 'email']
 
@@ -24,22 +31,18 @@ class RecruitCreate(CreateView):
         return reverse('recruit-testing', kwargs={'pk': self.object.id})
 
 
-# class SithListView(ListView):
-#     model = Sith
-#     paginate_by = 10
-
-
 def sith_menu(request):
+    """
+    Отображение страницы выбора ситха
+    """
+
     sith_list = Sith.objects.all()
 
     if request.method == 'POST':
-        # print('POST - sith.id - ', request.POST['sith_id'])
         try:
             sith_id = int(request.POST['sith_id'])
         except (KeyError, Sith.DoesNotExist):
             return redirect('sith-list')
-        print('sith_id = ', sith_id)
-        print(type(sith_id))
         return redirect('recruit-list', pk=sith_id)
 
     context = {
@@ -48,11 +51,11 @@ def sith_menu(request):
     return render(request, 'recruiting/sith_menu.html', context=context)
 
 
-# class SithDetail(DetailView):
-#     model = Sith
-
-
 def save_answer(request, question, answer, test_instance):
+    """
+    Функция сохранения ответов на вопросы тестового задания
+    """
+
     TestAnswers.objects.create(
         to_question=TestQuestions.objects.all().get(pk=question),
         test=test_instance,
@@ -61,25 +64,23 @@ def save_answer(request, question, answer, test_instance):
 
 
 def recruit_test(request, pk):
+    """
+    Отображение тестового задания для рекрута
+    """
+
     recruit = get_object_or_404(Recruit, pk=pk)
     test_questions = TestQuestions.objects.filter(is_used_in_test=True).order_by('id')
-
-    # test = Test.objects.create(recruit=recruit)
-    # test.questions.set(test_questions)
     form = forms.QuestionsForm(request.POST or None, questions=test_questions)
 
     if request.method == 'POST':
-        print('im here! - test create')
         test = Test.objects.create(recruit=recruit)
         test.questions.set(test_questions)
         form = forms.QuestionsForm(request.POST or None, questions=test_questions)
         if form.is_valid():
             for (question, answer) in form.answers():
                 save_answer(request, question, answer, test)
-            print('im here! - test saved')
             return redirect('home')
     else:
-        print('im here111 - GET')
         context = {
             'form': form,
             'recruit': recruit
@@ -92,6 +93,7 @@ class RecruitListView(View):
     Вывод списка рекрутов на планете ситха (с его данными и ответами на тестовые вопросы)
     с возможностью зачислить его Рукой Тени
     """
+
     @staticmethod
     def send_email(recruit):
 
@@ -107,13 +109,11 @@ class RecruitListView(View):
                 return HttpResponse('Invalid header found.')
 
     def get(self, request, **kwargs):
-        print('im here111qwe')
         pk = kwargs.pop('pk')
         sith_instance = get_object_or_404(Sith, pk=pk)
         hands_count = sith_instance.shadow_hand_count
 
         if hands_count >= 3:
-            print('hands count = ', hands_count)
             return render(request, 'recruiting/max_shadow_hands.html')
 
         planet = sith_instance.planet
@@ -129,9 +129,6 @@ class RecruitListView(View):
     def post(self, request, **kwargs):
         pk = kwargs.pop('pk')
 
-        # if hands_count >= 3:
-        #     print('hands count = ', hands_count)
-        #     return render(request, 'recruiting/max_shadow_hands.html')
         try:
             recruit = Recruit.objects.get(name=request.POST['recruit'])
         except (KeyError, Recruit.DoesNotExist):
@@ -143,11 +140,9 @@ class RecruitListView(View):
         recruit.shadow_hand_rank = True
         recruit.save()
         self.send_email(recruit)
-        print('send email')
         hands_count = sith.shadow_hand_count
 
         if hands_count >= 3:
-            print('hands count = ', hands_count)
             return render(request, 'recruiting/max_shadow_hands.html')
 
         context = {
@@ -159,6 +154,10 @@ class RecruitListView(View):
 
 
 def full_sith_list(request):
+    """
+    Отобрадение полного списка ситхов с количеством их Рук Тени
+    """
+
     sith_list = Sith.objects.all()
     context = {
         'sith_list': sith_list
@@ -167,6 +166,10 @@ def full_sith_list(request):
 
 
 def more_than_one_list(request):
+    """
+    Отображение списка ситхов, у которых более 1й Реки Тени
+    """
+
     sith_list = Sith.objects.all()
     new_list = list()
     for sith in sith_list:

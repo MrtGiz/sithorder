@@ -1,35 +1,34 @@
 {% extends "base_generic.html" %}
 
+{% block title %}<title>Список рекрутов для обучения</title>{% endblock %}
+
 {% block content %}
   <h1>Рекруты на вашей планете ({{ sith_instance.planet }})</h1>
   <p>Рук тени у вас: {{ hands_count }} </p>
     <form action="{% url 'recruit-list' sith_instance.id %}" method="post">
     {% csrf_token %}
     {% if recruits %}
-        <ul>
         {% for recruit in recruits %}
-
-        <li>
-            <input type="radio" id="recruit" name="recruit" value="{{ recruit }}">
-            <p>Name: {{ recruit.name }} (id: {{ recruit.id }})</p>
+        <br>
+            <p><input type="radio" id="recruit" name="recruit" value="{{ recruit }}">
+            Name: {{ recruit.name }}</p>
             <p>Age: {{ recruit.age }}</p>
             <p>E-mail: {{ recruit.email }}</p>
+            <p style="bold">Ответы рекрута на тестовое испытание:</p>
             <ul>
                 {% for qa in recruit.get_questions_answers%}
                     <li>{{ qa.0 }}: {{ qa.1|upper }}</li>
                 {% endfor %}
             </ul>
-        </li>
+        <hr align="left" width="500" color="Black" />
         {% endfor %}
-        </ul>
         <input type="submit" value="Submit">
     </form>
-    <br>
-    <br>
-    <a href="{% url 'home' %}">Вернуться на главную</a>
+
     {% else %}
         <p>There are no recruits registered.</p>
-        <br>
-        <a href="{% url 'home' %}">Вернуться на главную</a>
     {% endif %}
+
+    <br>
+    <a href="{% url 'home' %}">Вернуться на главную</a>
 {% endblock %}l>

@@ -1,7 +1,10 @@
 {% extends "base_generic.html" %}
 
-{% block content %}
+{% block title %}<title>Регистрация рекрута</title>{% endblock %}
 
+{% block content %}
+<h1>Форма регистрации:</h1>
+<br>
 <form action="" method="post">
     {% csrf_token %}
     <table>

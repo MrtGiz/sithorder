@@ -1,8 +1,4 @@
-from django.forms import ModelForm
 from django import forms
-from .models import TestAnswers
-
-from operator import attrgetter
 
 
 class QuestionsForm(forms.Form):

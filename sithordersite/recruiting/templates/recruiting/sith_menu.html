@@ -1,21 +1,22 @@
 {% extends "base_generic.html" %}
 
+{% block title %}<title>Список Ситхов</title>{% endblock %}
+
 {% block content %}
-  <h1>Sith Menu</h1>
+  <h1>Список ситхов</h1>
+    <br>
     <form action="{% url 'sith-list' %}" method="post">
     {% csrf_token %}
-  {% if sith_list %}
-  <ul>
-    {% for sith in sith_list %}
-      <p><input type="radio" id="sith" name="sith_id" value="{{ sith.id }}">  {{ sith.name }} ({{ sith.planet }})</p>
-    {% endfor %}
-    <input type="submit" value="Выбрать">
-    <br>
-      <br>
-    <a href="{% url 'home' %}">Вернуться на главную</a>
-  </ul>
+    {% if sith_list %}
+        {% for sith in sith_list %}
+        <p><input type="radio" id="sith" name="sith_id" value="{{ sith.id }}">  {{ sith.name }} ({{ sith.planet }})</p>
+        {% endfor %}
+        <input type="submit" value="Выбрать">
+        <br>
+        <br>
+        <a href="{% url 'home' %}">Вернуться на главную</a>
     </form>
-  {% else %}
-    <p>There are no siths registered.</p>
-  {% endif %}
+    {% else %}
+        <p>There are no siths registered.</p>
+    {% endif %}
 {% endblock %}l>

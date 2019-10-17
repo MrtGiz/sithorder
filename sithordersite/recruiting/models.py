@@ -1,10 +1,8 @@
 from django.db import models
-# from sithordersite.settings import charfield_length
 from django.urls import reverse
 
 import uuid
 
-# Create your models here.
 charfield_length = 50
 
 
@@ -27,12 +25,8 @@ class Sith(models.Model):
     def shadow_hand_count(self):
         count_sh = Recruit.objects.filter(master=self).count()
         return count_sh
-    # shadow_hand_count.short_description = 'Количество рук тени'
 
     def get_absolute_url(self):
-        """
-        Returns the url to access a particular author instance.
-        """
         return reverse('sith-detail', args=[str(self.id)])
 
 
@@ -56,25 +50,20 @@ class Recruit(models.Model):
     @property
     def get_questions_answers(self):
         test = Test.objects.get(recruit=self)
-        print(test)
         questions = TestQuestions.objects.filter(is_used_in_test=True)
-        print(questions)
-        qa = list()
+        question_answer = list()
 
         for question in questions:
-            print('im here! - 1- ', question)
-            t_answer = TestAnswers.objects.get(test=test, to_question=question)
-            print('im here! - 2 - ', t_answer)
-            qa.append((question, t_answer))
-        print(qa)
-        return qa
+            test_answer = TestAnswers.objects.get(test=test, to_question=question)
+            question_answer.append((question, test_answer))
+        return question_answer
 
 
 class Test(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                           help_text="Уникальный код испытания")
     questions = models.ManyToManyField('TestQuestions', help_text='вопросы в тесте', blank=True)
-    recruit = models.ForeignKey('Recruit', on_delete=models.CASCADE)
+    recruit = models.ForeignKey('Recruit', on_delete=models.CASCADE, help_text='Рекрут, прошедший данный тест')
 
     def __str__(self):
         return 'Test CODE: {0}\nRecruit name: {1}'.format(self.id, self.recruit)
@@ -82,7 +71,6 @@ class Test(models.Model):
 
 class TestQuestions(models.Model):
     question = models.TextField(max_length=300, help_text='Введите текст вопроса')
-    # test = models.ForeignKey('Test', on_delete=models.CASCADE)
     is_used_in_test = models.BooleanField(blank=True, default=False,
                                           help_text='Отметьте, чтобы использовать вопрос в тестах',
                                           verbose_name='Использовать в тестах',

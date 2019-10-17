@@ -1,18 +1,21 @@
 {% extends "base_generic.html" %}
 
+{% block title %}<title>Список Ситхов</title>{% endblock %}
+
 {% block content %}
   <h1>Список Ситхов</h1>
     {% if sith_list %}
     <table>
         <tr>
-            <td>Имя</td> <td>Количество Рук Тени</td>
+            <th>Имя</th>
+            <th>Количество Рук Тени</th>
         </tr>
 
         {% for sith in sith_list %}
         <p>
             <tr>
                 <td><a href="{% url 'recruit-list' sith.id %}">{{ sith.name }}</a> ({{ sith.planet }})</td>
-                <th>    {{ sith.shadow_hand_count }}</th>
+                <td align="center">{{ sith.shadow_hand_count }}</td>
             </tr>
         </p>
         {% endfor %}
