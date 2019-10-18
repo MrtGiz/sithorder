@@ -30,7 +30,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'te3=5r2!+2_@qs)x92cq(bi@g*=q9@
 DEBUG = bool(os.environ.get('DJANGO_DEBUG', False))
 
 ALLOWED_HOSTS = [
-    'https://sith-order-site.herokuapp.com/',
+    'sith-order-site.herokuapp.com',
     '127.0.0.1',
 ]
 
