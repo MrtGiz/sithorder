@@ -5,7 +5,7 @@
 # C extensions
 *.so
 
-venv/
+/venv/
 .idea/
 
 # Text backup files
