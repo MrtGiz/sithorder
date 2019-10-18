@@ -12,9 +12,6 @@
         <p><input type="radio" id="sith" name="sith_id" value="{{ sith.id }}">  {{ sith.name }} ({{ sith.planet }})</p>
         {% endfor %}
         <input type="submit" value="Выбрать">
-        <br>
-        <br>
-        <a href="{% url 'home' %}">Вернуться на главную</a>
     </form>
     {% else %}
         <p>There are no siths registered.</p>
